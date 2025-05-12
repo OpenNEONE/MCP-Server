@@ -1,0 +1,40 @@
+{
+  "name": "mcp-demo",
+  "version": "1.0.0",
+  "description": "MCP服务示例，包含文本翻译和简单加法能力",
+  "type": "module",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "dev": "tsc && node build/index.js",
+    "start:http": "MCP_MODE=http node build/index.js",
+    "dev:http": "tsc && MCP_MODE=http node build/index.js",
+    "test": "node test/test-client.js",
+    "test:manual": "chmod +x test/manual-test.sh && test/manual-test.sh",
+    "test:http": "npm install node-fetch && node test/http-client.js",
+    "docker:build": "docker build -t mcp-demo-service .",
+    "docker:run": "docker run -it --rm --name mcp-demo-service mcp-demo-service",
+    "docker:run:http": "docker run -it --rm -p 3000:3000 -e MCP_MODE=http --name mcp-demo-service mcp-demo-service"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tools",
+    "ai"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.4.2"
+  }
+}

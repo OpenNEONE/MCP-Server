@@ -1,0 +1,18 @@
+# MCP 服务 Docker Compose 配置
+version: '3'
+
+services:
+  mcp-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-demo-service
+    restart: unless-stopped
+    # 如果您需要将服务器连接到主机网络，可以取消注释以下行
+    # network_mode: "host"
+    volumes:
+      # 如果您想挂载一些配置或数据，可以在这里添加
+      - ./logs:/app/logs
+    # 如果您的服务暴露了端口，可以在这里映射
+    # ports:
+    #   - "7000:7000"

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP 服务测试客户端</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            background-color: #f5f5f5;
+            border-left: 4px solid #4CAF50;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        pre {
+            white-space: pre-wrap;
+            overflow-x: auto;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .error {
+            border-left: 4px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>MCP 服务测试客户端</h1>
+    <p>这是一个简单的网页客户端，用于测试 MCP 服务的 HTTP 接口。</p>
+
+    <div class="card">
+        <h2>发现可用工具</h2>
+        <button id="discoverButton">发现工具</button>
+        <div id="discoverResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="card">
+        <h2>文本翻译工具</h2>
+        <div class="form-group">
+            <label for="translateText">文本：</label>
+            <input type="text" id="translateText" placeholder="请输入要翻译的文本" value="你好，世界！">
+        </div>
+        <div class="form-group">
+            <label for="translateTargetLang">目标语言：</label>
+            <select id="translateTargetLang">
+                <option value="en">英语 (en)</option>
+                <option value="zh">中文 (zh)</option>
+                <option value="fr">法语 (fr)</option>
+                <option value="es">西班牙语 (es)</option>
+                <option value="ja">日语 (ja)</option>
+            </select>
+        </div>
+        <button id="translateButton">翻译</button>
+        <div id="translateResult" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="card">
+        <h2>加法计算工具</h2>
+        <div class="form-group">
+            <label for="addNumber1">第一个数字：</label>
+            <input type="number" id="addNumber1" value="5">
+        </div>
+        <div class="form-group">
+            <label for="addNumber2">第二个数字：</label>
+            <input type="number" id="addNumber2" value="3">
+        </div>
+        <button id="addButton">计算</button>
+        <div id="addResult" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // MCP 版本
+        const MCP_VERSION = "0.1.0";
+        // 服务地址
+        const API_URL = "http://localhost:3000/mcp";
+
+        // 工具发现
+        document.getElementById('discoverButton').addEventListener('click', async () => {
+            try {
+                const data = {
+                    mcp_version: MCP_VERSION,
+                    id: "discover-" + Date.now(),
+                    method: "discover"
+                };
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showResult('discoverResult', result);
+            } catch (error) {
+                showError('discoverResult', error);
+            }
+        });
+
+        // 文本翻译
+        document.getElementById('translateButton').addEventListener('click', async () => {
+            try {
+                const text = document.getElementById('translateText').value;
+                const targetLanguage = document.getElementById('translateTargetLang').value;
+                
+                const data = {
+                    mcp_version: MCP_VERSION,
+                    id: "translate-" + Date.now(),
+                    method: "execute",
+                    toolName: "translateText",
+                    inputs: {
+                        text: text,
+                        targetLanguage: targetLanguage
+                    }
+                };
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showResult('translateResult', result);
+            } catch (error) {
+                showError('translateResult', error);
+            }
+        });
+
+        // 加法计算
+        document.getElementById('addButton').addEventListener('click', async () => {
+            try {
+                const number1 = parseFloat(document.getElementById('addNumber1').value);
+                const number2 = parseFloat(document.getElementById('addNumber2').value);
+                
+                const data = {
+                    mcp_version: MCP_VERSION,
+                    id: "add-" + Date.now(),
+                    method: "execute",
+                    toolName: "addNumbers",
+                    inputs: {
+                        number1: number1,
+                        number2: number2
+                    }
+                };
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showResult('addResult', result);
+            } catch (error) {
+                showError('addResult', error);
+            }
+        });
+
+        // 显示结果
+        function showResult(elementId, data) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<h3>响应:</h3><pre>${JSON.stringify(data, null, 2)}</pre>`;
+            element.style.display = 'block';
+            element.classList.remove('error');
+        }
+
+        // 显示错误
+        function showError(elementId, error) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<h3>错误:</h3><pre>${error.message || JSON.stringify(error)}</pre>`;
+            element.style.display = 'block';
+            element.classList.add('error');
+        }
+    </script>
+</body>
+</html>

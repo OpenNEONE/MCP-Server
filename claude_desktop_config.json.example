@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "mcp-demo": {
+      "command": "node",
+      "args": [
+        "/Users/ardour/Documents/CODE_demo/MCP-demo/build/index.js"
+      ]
+    }
+  }
+}
