@@ -1,7 +1,7 @@
 {
   "name": "mcp-demo",
   "version": "1.0.0",
-  "description": "MCP服务示例，包含文本翻译和简单加法能力",
+  "description": "MCP服务示例，包含了百度地图MCP服务的实现",
   "type": "module",
   "main": "build/index.js",
   "scripts": {

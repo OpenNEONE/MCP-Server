@@ -1,8 +1,17 @@
-# MCP 服务示例
+# 百度地图 MCP 服务
 
-这个项目是一个 Model Context Protocol (MCP) 服务示例，实现了两个能力：
-- 文本翻译工具 (translateText)
-- 简单加法计算工具 (addNumbers)
+这个项目是一个基于百度地图 API 的 Model Context Protocol (MCP) 服务，提供以下能力：
+
+- 地理编码服务 (map_geocode)
+- 逆地理编码服务 (map_reverse_geocode)
+- 地点检索服务 (map_search_places)
+- 地点详情检索服务 (map_place_details)
+- 距离矩阵计算 (map_distance_matrix)
+- 路线规划服务 (map_directions)
+- 天气查询服务 (map_weather)
+- IP定位服务 (map_ip_location)
+- 路况查询服务 (map_road_traffic)
+- POI智能标注 (map_poi_extract)
 
 该项目演示了如何从零开始搭建一个 MCP 服务，包括能力定义、执行接口和容器化部署。服务支持通过 stdio 本地通信和 HTTP 远程调用两种方式。
 
@@ -22,21 +31,80 @@
 
 ## 功能描述
 
-### 文本翻译工具 (translateText)
-
-这个工具可以将文本从一种语言翻译到另一种语言。在示例实现中，我们提供了简单的模拟翻译功能。
-
-参数：
-- `text`: 要翻译的文本
-- `targetLanguage`: 目标语言代码，如 'en', 'zh', 'fr' 等
-
-### 简单加法工具 (addNumbers)
-
-这个工具可以执行两个数字的加法运算。
+### 地理编码服务 (map_geocode)
+将地址转换为经纬度坐标。
 
 参数：
-- `number1`: 第一个数字
-- `number2`: 第二个数字
+- `address`: 待解析的地址
+
+### 逆地理编码服务 (map_reverse_geocode)
+将经纬度坐标转换为地址描述。
+
+参数：
+- `latitude`: 纬度
+- `longitude`: 经度
+
+### 地点检索服务 (map_search_places)
+检索地点信息。
+
+参数：
+- `query`: 检索关键字
+- `region`: [可选] 检索行政区划区域
+- `bounds`: [可选] 检索多边形区域
+- `location`: [可选] 圆形区域检索中心点
+
+### 地点详情检索 (map_place_details)
+获取地点详细信息。
+
+参数：
+- `uid`: POI的唯一标识
+- `scope`: [可选] 详情信息范围
+
+### 距离矩阵计算 (map_distance_matrix)
+计算多个起终点间的距离和时间。
+
+参数：
+- `origins`: 起点坐标数组
+- `destinations`: 终点坐标数组
+- `mode`: [可选] 出行方式(驾车/步行/骑行/摩托车)
+
+### 路线规划服务 (map_directions)
+规划出行路线。
+
+参数：
+- `origin`: 起点坐标
+- `destination`: 终点坐标
+- `mode`: [可选] 出行方式(驾车/步行/骑行/公交)
+
+### 天气查询服务 (map_weather)
+获取天气信息。
+
+参数：
+- `districtId`: [可选] 行政区划代码
+- `location`: [可选] 经纬度坐标
+
+### IP定位服务 (map_ip_location)
+根据IP地址获取位置信息。
+
+参数：
+- `ip`: IP地址
+
+### 路况查询服务 (map_road_traffic)
+获取道路实时路况。
+
+参数：
+- `roadName`: [可选] 道路名称
+- `city`: [可选] 城市名称
+- `bounds`: [可选] 矩形区域范围
+- `vertexes`: [可选] 多边形区域顶点
+- `center`: [可选] 圆形区域中心点
+- `radius`: [可选] 圆形区域半径
+
+### POI智能标注 (map_poi_extract)
+分析文本中的POI信息。
+
+参数：
+- `textContent`: 待分析的文本内容
 
 ## 通信模式
 

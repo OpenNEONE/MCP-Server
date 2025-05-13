@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * 这是一个简单的测试脚本，用于测试 MCP 服务
+ * 这是一个用于测试百度地图 MCP 服务的测试脚本
  * 它通过管道与服务通信，模拟 MCP 客户端的行为
  */
 
@@ -48,7 +48,71 @@ function processServerResponse(response) {
   }
 }
 
-// 等待服务启动
+// 测试各个工具功能
+async function runTests() {
+  // 等待服务启动
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // 1. 列出所有可用工具
+  console.log('\n测试 listTools:');
+  const listToolsRequest = {
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'listTools',
+    params: {}
+  };
+  mcpServer.stdin.write(JSON.stringify(listToolsRequest) + '\n');
+
+  // 2. 测试地理编码服务
+  console.log('\n测试 地理编码服务:');
+  const geocodeRequest = {
+    jsonrpc: '2.0',
+    id: 2,
+    method: 'callTool',
+    params: {
+      name: 'map_geocode',
+      arguments: {
+        address: '上海市静安区静安寺'
+      }
+    }
+  };
+  mcpServer.stdin.write(JSON.stringify(geocodeRequest) + '\n');
+
+  // 3. 测试天气服务
+  console.log('\n测试 天气服务:');
+  const weatherRequest = {
+    jsonrpc: '2.0',
+    id: 3,
+    method: 'callTool',
+    params: {
+      name: 'map_weather',
+      arguments: {
+        districtId: '310106'  // 上海市静安区
+      }
+    }
+  };
+  mcpServer.stdin.write(JSON.stringify(weatherRequest) + '\n');
+
+  // 4. 测试路线规划
+  console.log('\n测试 路线规划服务:');
+  const directionsRequest = {
+    jsonrpc: '2.0',
+    id: 4,
+    method: 'callTool',
+    params: {
+      name: 'map_directions',
+      arguments: {
+        origin: '31.231092,121.449976',  // 静安寺
+        destination: '30.903569,121.947300',  // 滴水湖
+        mode: 'driving'
+      }
+    }
+  };
+  mcpServer.stdin.write(JSON.stringify(directionsRequest) + '\n');
+}
+
+// 运行测试
+runTests().catch(console.error);
 setTimeout(() => {
   // 发送 JSON-RPC 2.0 格式的初始化请求
   sendRequest({
