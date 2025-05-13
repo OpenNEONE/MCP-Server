@@ -10,8 +10,5 @@
         "start"
       ]
     },
-    "my-mcp-server-test": {
-      "url": "http://localhost:3000/mcp"
-    }
   }
 }

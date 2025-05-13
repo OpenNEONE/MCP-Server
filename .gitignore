@@ -4,11 +4,6 @@ node_modules/
 # 构建输出
 build/
 
-# 环境变量文件
-.env
-.env.local
-.env.*.local
-
 # 日志文件
 logs/
 *.log

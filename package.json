@@ -6,8 +6,8 @@
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js",
-    "dev": "tsc && node build/index.js",
+    "start": "node -r dotenv/config build/index.js",
+    "dev": "tsc && node -r dotenv/config build/index.js",
     "start:http": "MCP_MODE=http node build/index.js",
     "dev:http": "tsc && MCP_MODE=http node build/index.js",
     "test": "node test/test-client.js",
